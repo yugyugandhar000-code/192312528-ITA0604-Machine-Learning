@@ -1,0 +1,98 @@
+# Simple Genetic Algorithm
+# Goal: Find a number between 0 and 10
+# that gives the highest x² value
+
+import random
+
+# Fitness function
+def fitness(x):
+    return x ** 2
+
+
+# Step 1: Create an initial population
+population = [random.randint(0, 10) for _ in range(6)]
+
+print("Initial Population:", population)
+
+
+# Repeat the process for 5 generations
+for generation in range(5):
+
+    print("\nGeneration:", generation + 1)
+
+    # Step 2: Arrange numbers based on fitness
+    # Higher fitness comes first
+    population.sort(key=fitness, reverse=True)
+
+    print("Population:", population)
+    print("Fitness values:", [fitness(x) for x in population])
+
+    # Step 3: Select the two best parents
+    parent1 = population[0]
+    parent2 = population[1]
+
+    print("Selected Parents:", parent1, parent2)
+
+    # Keep the best parents
+    new_population = [parent1, parent2]
+
+    # Step 4: Create children
+    while len(new_population) < 6:
+
+        # Crossover:
+        # Take the average of the parents
+        child = (parent1 + parent2) // 2
+
+        # Step 5: Mutation:
+        # Randomly increase or decrease the child
+        mutation = random.choice([-1, 0, 1])
+        child = child + mutation
+
+        # Keep child between 0 and 10
+        child = max(0, min(10, child))
+
+        new_population.append(child)
+
+    # Step 6: Replace old population
+    population = new_population
+
+
+# Find the final best solution
+population.sort(key=fitness, reverse=True)
+
+best_value = population[0]
+
+print("\nFinal Best Value:", best_value)
+print("Final Best Fitness:", fitness(best_value)) 
+
+OUTPUT:
+
+Initial Population: [5, 9, 5, 6, 0, 8]
+
+Generation: 1
+Population: [9, 8, 6, 5, 5, 0]
+Fitness values: [81, 64, 36, 25, 25, 0]
+Selected Parents: 9 8
+
+Generation: 2
+Population: [9, 9, 8, 8, 8, 8]
+Fitness values: [81, 81, 64, 64, 64, 64]
+Selected Parents: 9 9
+
+Generation: 3
+Population: [9, 9, 9, 8, 8, 8]
+Fitness values: [81, 81, 81, 64, 64, 64]
+Selected Parents: 9 9
+
+Generation: 4
+Population: [10, 9, 9, 9, 8, 8]
+Fitness values: [100, 81, 81, 81, 64, 64]
+Selected Parents: 10 9
+
+Generation: 5
+Population: [10, 10, 10, 10, 9, 9]
+Fitness values: [100, 100, 100, 100, 81, 81]
+Selected Parents: 10 10
+
+Final Best Value: 10
+Final Best Fitness: 100
